@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dewan Kelas SD5 Jagawana · SAI Cipedak</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-mid: #243356;
+    --gold: #c8a84b;
+    --gold-light: #e2c97e;
+    --gold-pale: #f5ecd4;
+    --cream: #faf8f3;
+    --open: #7b5e1a;
+    --open-bg: #fff8e1;
+    --open-border: #e8c84a;
+    --half: #7b5e1a;
+    --half-bg: #fff8e1;
+    --half-border: #e8c84a;
+    --filled-green: #2d6a4f;
+    --filled-green-bg: #d8f3dc;
+    --filled-green-border: #74c69d;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  .header { background: var(--navy); color: white; padding: 48px 24px 40px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent); }
+  .header-badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); padding: 4px 14px; border-radius: 2px; margin-bottom: 20px; }
+  .header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 6vw, 48px); font-weight: 700; color: white; line-height: 1.1; margin-bottom: 8px; }
+  .header h1 span { color: var(--gold-light); }
+  .header-sub { font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 300; margin-top: 4px; }
+  .header-divider { width: 48px; height: 1px; background: var(--gold); margin: 20px auto; opacity: 0.6; }
+
+  /* LEGEND */
+  .legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; padding: 14px 24px; background: var(--navy-mid); border-bottom: 1px solid rgba(200,168,75,0.2); }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.7); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-filled { background: #74c69d; }
+  .dot-half { background: var(--half-border); }
+  .dot-open { background: #e8c84a; }
+  .legend-hint { font-size: 10px; color: rgba(255,255,255,0.4); margin-left: 8px; }
+
+  /* MAIN */
+  main { max-width: 960px; margin: 0 auto; padding: 40px 20px 60px; }
+
+  /* SECTION LABEL */
+  .section-label { font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; margin-top: 40px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,168,75,0.4), transparent); }
+
+  .inti-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .divisi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+  /* CARD */
+  .card { background: white; border-radius: 8px; padding: 18px 20px; border: 1px solid #e8e4da; position: relative; cursor: pointer; transition: box-shadow 0.2s, transform 0.2s; }
+  .card:hover { box-shadow: 0 4px 20px rgba(26,39,68,0.12); transform: translateY(-2px); }
+  
+  .card.filled { border-left: 3px solid var(--filled-green-border); background: linear-gradient(to right, #f0fdf4, white 60%); }
+  .card.half { border-left: 3px solid var(--half-border); background: linear-gradient(to right, #fffbf0, white 60%); }
+  .card.open { border-left: 3px solid var(--open-border); background: linear-gradient(to right, #fffbf0, white 60%); }
+  .card.inti { background: var(--navy); border: none; border-top: 3px solid var(--gold); color: white; }
+  .card.inti .role { color: var(--gold-light); }
+  .card.inti .names { color: rgba(255,255,255,0.9); }
+
+  .role { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--navy); margin-bottom: 10px; padding-right: 64px; }
+  .names { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; color: var(--navy); line-height: 1.4; }
+  .names .name { display: block; }
+
+  .status-badge { position: absolute; top: 14px; right: 14px; font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; }
+  .badge-filled { background: var(--filled-green-bg); color: var(--filled-green); border: 1px solid var(--filled-green-border); }
+  .badge-half { background: var(--half-bg); color: var(--half); border: 1px solid var(--half-border); }
+  .badge-open { background: var(--open-bg); color: var(--open); border: 1px solid var(--open-border); }
+
+  .open-slots { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .slot-pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 1.5px dashed var(--open-border); color: var(--open); background: transparent; font-weight: 500; }
+  .slot-pill.half-pill { border-color: var(--half-border); color: var(--half); }
+
+  /* JOBDESC HINT */
+  .jobdesc-hint { position: absolute; bottom: 12px; right: 14px; font-size: 12px; color: var(--gold); opacity: 1; font-weight: 600; display: flex; align-items: center; gap: 4px; letter-spacing: 0.3px; }
+  .card.inti .jobdesc-hint { color: var(--gold-light); }
+
+  /* CTA */
+  .cta-box { margin-top: 48px; background: var(--navy); border-radius: 10px; padding: 32px; text-align: center; border-top: 3px solid var(--gold); }
+  .cta-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: white; margin-bottom: 8px; }
+  .cta-box p { color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 20px; line-height: 1.6; }
+  .open-count { display: inline-block; background: #fff8e1; color: #7b5e1a; border: 1px solid #e8c84a; border-radius: 20px; font-size: 12px; font-weight: 600; padding: 4px 16px; margin-bottom: 16px; }
+
+  footer { text-align: center; padding: 24px; font-size: 11px; color: var(--muted); border-top: 1px solid #e8e4da; }
+
+  /* ── MODAL ── */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,18,40,0.6); z-index: 100; backdrop-filter: blur(3px); align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.active { display: flex; }
+  .modal { background: white; border-radius: 12px; max-width: 520px; width: 100%; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.3); animation: slideUp 0.2s ease; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  .modal-header { padding: 24px 24px 0; border-bottom: 1px solid #f0ece4; padding-bottom: 16px; }
+  .modal-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--navy); line-height: 1.2; }
+  .modal-members { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .modal-body { padding: 20px 24px 28px; }
+  .modal-section-title { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--navy); margin-bottom: 10px; margin-top: 20px; }
+  .modal-section-title:first-child { margin-top: 0; }
+  .modal-desc { font-size: 14px; line-height: 1.7; color: #374151; }
+  .modal-desc ul { padding-left: 18px; margin-top: 6px; }
+  .modal-desc ul li { margin-bottom: 4px; }
+  .modal-pending { font-size: 13px; color: var(--muted); font-style: italic; background: #f9f7f3; border: 1px dashed #d1c9b8; border-radius: 6px; padding: 12px 16px; }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.15s; }
+  .modal-close:hover { background: #f3f0eb; }
+
+  @media (max-width: 480px) {
+    .inti-grid { grid-template-columns: 1fr; }
+    .divisi-grid { grid-template-columns: 1fr; }
+    .modal { max-height: 92vh; border-radius: 12px 12px 0 0; align-self: flex-end; }
+    .modal-overlay { align-items: flex-end; padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     DATA JOBDESC — Edit bagian ini untuk update
+     ══════════════════════════════════════════ -->
+<script>
+const JOBDESC = {
+
+  // ── PENGURUS INTI ──
+  "ketua-dk": {
+    eyebrow: "Pengurus Inti",
+    title: "Ketua DK",
+    members: ["OTS Kala"],
+    tanggung_jawab: [
+      "Memimpin dan mengkoordinasikan seluruh kegiatan Dewan Kelas SD5",
+      "Menjadi penghubung utama antara orang tua siswa dan pihak sekolah",
+      "Memimpin rapat pengurus DK secara berkala",
+      "Memastikan seluruh program berjalan sesuai rencana dan nilai sekolah"
+    ],
+    catatan: null
+  },
+
+  "wakil-ketua": {
+    eyebrow: "Pengurus Inti",
+    title: "Wakil Ketua",
+    members: ["OTS Tidar", "OTS Rafie"],
+    tanggung_jawab: [
+      "Mendampingi dan menggantikan Ketua DK bila berhalangan",
+      "Membantu koordinasi lintas divisi",
+      "Memantau progres program-program yang sedang berjalan"
+    ],
+    catatan: null
+  },
+
+  "bendahara": {
+    eyebrow: "Pengurus Inti",
+    title: "Bendahara",
+    members: ["OTS Aleena"],
+    tanggung_jawab: [
+      "Mengelola kas dan keuangan DK SD5",
+      "Mencatat pemasukan dan pengeluaran secara transparan",
+      "Menyusun laporan keuangan berkala untuk orang tua",
+      "Berkoordinasi dengan divisi Fund Raising & Menabung"
+    ],
+    catatan: null
+  },
+
+  // ── DIVISI ──
+  "komunikasi-saimart": {
+    eyebrow: "Divisi Kepengurusan",
+    title: "Komunikasi & SAIMart",
+    members: ["OTS Nisa"],
+    tanggung_jawab: [
+      "Menjadi penyampai informasi dari Fasil, DK, maupun sekolah kepada seluruh orang tua siswa"
+    ],
+    catatan: null
+  },
+
+  "fund-raising-merch": {
+    eyebrow: "Divisi Kepengurusan",
+    title: "Fund Raising & Merch",
+    members: ["OTS Reya", "OTS Asyifa", "OTS Rayi", "OTS Rahva", "OTS Ahsan"],
+    tanggung_jawab: [
+      "Mengkoordinasikan ide dan pelaksanaan fund raising orang tua maupun fund raising siswa melalui diskusi bersama Fasil"
+    ],
+    catatan: null
+  },
+
+  "proposal-sponsorship": {
+    eyebrow: "Divisi Kepengurusan",
+    title: "Proposal & Sponsorship",
+    members: ["OTS Sami", "OTS Wildan"],
+    tanggung_jawab: [
+      "Mengkoordinasikan pembuatan proposal resmi untuk keperluan sponsorship",
+      "Memonitor perolehan sponsor secara berkala",
+      "Membantu menjaga pelaksanaan kontraprestasi kepada sponsor"
+    ],
+    catatan: null
+  },
+
+  "konsumsi": {
+    eyebrow: "Divisi Kepengurusan",
+    title: "Konsumsi",
+    members: ["OTS Tasha", "OTS Aka", "OTS Kiyan"],
+    tanggung_jawab: [
+      "Mengkoordinasikan penyediaan konsumsi di berbagai kegiatan anak-anak"
+    ],
+    catatan: null
+  },
+
+  "transportasi": {
+    eyebrow: "Divisi Kepengurusan",
+    title: "Transportasi",
+    members: ["OTS Arkan", "OTS Ega", "OTS Faqih"],
+    tanggung_jawab: [
+      "Mengkoordinasikan penyediaan alat transportasi untuk kebutuhan pembelajaran seperti renang, outing, dan kegiatan pendukung lainnya"
+    ],
+    catatan: null
+  },
+
+  "perlengkapan-aset": {
+    eyebrow: "Divisi Kepengurusan",
+    title: "Perlengkapan & Aset",
+    members: ["OTS Rhakan", "OTS Alisha", "OTS Raffasya"],
+    tanggung_jawab: [
+      "Mengkoordinasikan penyediaan dan pengelolaan perlengkapan dan aset kelas",
+      "Melakukan inventarisasi aset kelas secara berkala",
+      "Memastikan pemanfaatan aset sesuai kebutuhan pembelajaran"
+    ],
+    catatan: null
+  },
+
+  "desain-medsos": {
+    eyebrow: "Divisi Kepengurusan",
+    title: "Desain & Media Sosial",
+    members: [],
+    tanggung_jawab: [
+      "Membuat desain flier untuk kegiatan kelas",
+      "Membuat desain untuk keperluan fund raising dan merchandise/kaos",
+      "Menyiapkan aset desain untuk pembuatan proposal",
+      "Membuat desain lainnya sesuai kebutuhan PJBL"
+    ],
+    catatan: "Posisi masih terbuka — dibutuhkan 3 anggota."
+  },
+
+  "dokumentasi-video": {
+    eyebrow: "Divisi Kepengurusan",
+    title: "Dokumentasi & Video",
+    members: [],
+    tanggung_jawab: [
+      "Mengkoordinasikan dokumentasi setiap kegiatan pembelajaran dalam bentuk foto dan video",
+      "Memastikan seluruh dokumentasi tersimpan dalam satu storage terpusat"
+    ],
+    catatan: "Posisi masih terbuka — dibutuhkan 2 anggota."
+  },
+
+  // ── PROGRAM ──
+  "rolling-book": {
+    eyebrow: "Koordinator Program",
+    title: "Rolling Book & Worksheet",
+    members: ["OTS Azi", "OTS Ghani"],
+    tanggung_jawab: [
+      "Mengkoordinasikan penyediaan rolling book dan worksheet kelas",
+      "Memonitor pemanfaatan rolling book dan worksheet secara berkala"
+    ],
+    catatan: null
+  },
+
+  "parenting-pembelajaran": {
+    eyebrow: "Koordinator Program",
+    title: "Parenting & Pembelajaran",
+    members: ["OTS Fatih", "OTS Najmah", "OTS Salim"],
+    tanggung_jawab: null,
+    catatan: "Jobdesc sedang dirumuskan. Akan diperbarui segera."
+  },
+
+  "pjbl-1": {
+    eyebrow: "Koordinator Program",
+    title: "PJBL 1",
+    members: ["OTS Jeehan", "OTS Fariq"],
+    tanggung_jawab: [
+      "Mengkoordinasikan pelaksanaan PJBL bersama fasil dan OTS sejak awal pembelajaran sampai dengan selebrasi"
+    ],
+    catatan: null
+  },
+
+  "pjbl-2": {
+    eyebrow: "Koordinator Program",
+    title: "PJBL 2",
+    members: [],
+    tanggung_jawab: [
+      "Mengkoordinasikan pelaksanaan PJBL bersama fasil dan OTS sejak awal pembelajaran sampai dengan selebrasi"
+    ],
+    catatan: "Posisi masih terbuka — dibutuhkan 2 anggota."
+  },
+
+  "pjbl-3": {
+    eyebrow: "Koordinator Program",
+    title: "PJBL 3",
+    members: [],
+    tanggung_jawab: [
+      "Mengkoordinasikan pelaksanaan PJBL bersama fasil dan OTS sejak awal pembelajaran sampai dengan selebrasi"
+    ],
+    catatan: "Posisi masih terbuka — dibutuhkan 2 anggota."
+  },
+
+  "pjbl-4": {
+    eyebrow: "Koordinator Program",
+    title: "PJBL 4",
+    members: [],
+    tanggung_jawab: [
+      "Mengkoordinasikan pelaksanaan PJBL bersama fasil dan OTS sejak awal pembelajaran sampai dengan selebrasi"
+    ],
+    catatan: "Posisi masih terbuka — dibutuhkan 2 anggota."
+  },
+
+  "outing-besar": {
+    eyebrow: "Koordinator Program",
+    title: "Outing Besar",
+    members: ["OTS Azka"],
+    tanggung_jawab: null,
+    catatan: "Jobdesc sedang dirumuskan."
+  },
+
+  "sosial": {
+    eyebrow: "Koordinator Program",
+    title: "Sosial",
+    members: ["OTS Ghazi", "OTS Adzkia"],
+    tanggung_jawab: [
+      "Mengkoordinasikan pengumpulan dana sosial",
+      "Menyalurkan dana untuk dukungan kepada warga SAI25 yang membutuhkan"
+    ],
+    catatan: null
+  },
+
+  "menabung": {
+    eyebrow: "Koordinator Program",
+    title: "Menabung",
+    members: ["OTS Zafran", "OTS Affan"],
+    tanggung_jawab: [
+      "Mengelola tabungan rutin anak-anak"
+    ],
+    catatan: "Masih membutuhkan 1 anggota lagi."
+  },
+
+  "kebersamaan-olahraga": {
+    eyebrow: "Koordinator Program",
+    title: "Kebersamaan & Olahraga",
+    members: [],
+    tanggung_jawab: null,
+    catatan: "Posisi masih terbuka — dibutuhkan 2 anggota."
+  },
+
+  "family-gathering": {
+    eyebrow: "Koordinator Program",
+    title: "Family Gathering",
+    members: ["OTS Fatih"],
+    tanggung_jawab: [
+      "Mengkoordinasikan pelaksanaan family gathering yang diikuti seluruh warga SAI25"
+    ],
+    catatan: "Masih membutuhkan 1 anggota lagi."
+  }
+};
+
+function openModal(key) {
+  const d = JOBDESC[key];
+  if (!d) return;
+  document.getElementById('modal-eyebrow').textContent = d.eyebrow;
+  document.getElementById('modal-title').textContent = d.title;
+  document.getElementById('modal-members').textContent =
+    d.members && d.members.length > 0 ? '👤 ' + d.members.join(' · ') : '— Posisi belum terisi';
+
+  const body = document.getElementById('modal-body');
+  body.innerHTML = '';
+
+  if (d.tanggung_jawab && d.tanggung_jawab.length > 0) {
+    const t = document.createElement('div');
+    t.innerHTML = '<div class="modal-section-title">Tanggung Jawab</div>' +
+      '<div class="modal-desc"><ul>' +
+      d.tanggung_jawab.map(item => `<li>${item}</li>`).join('') +
+      '</ul></div>';
+    body.appendChild(t);
+  }
+
+  if (d.catatan) {
+    const c = document.createElement('div');
+    c.innerHTML = (d.tanggung_jawab ? '<div class="modal-section-title" style="margin-top:20px">Catatan</div>' : '') +
+      `<div class="modal-pending">${d.catatan}</div>`;
+    body.appendChild(c);
+  }
+
+  if (!d.tanggung_jawab && !d.catatan) {
+    body.innerHTML = '<div class="modal-pending">Informasi jobdesc belum tersedia.</div>';
+  }
+
+  document.getElementById('modal-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+</script>
+
+<header class="header">
+  <div class="header-badge">Dewan Kelas · SD Kelas 5</div>
+  <h1>Kepengurusan <span>DK SD5 Jagawana</span></h1>
+  <p style="font-family:'Cormorant Garamond',serif; font-size:17px; color:rgba(255,255,255,0.7); margin-top:6px;">SAI Cipedak · Tahun Ajaran 2026/2027</p>
+  <div class="header-divider"></div>
+  <p class="header-sub">Struktur ini sedang dalam proses pembentukan — beberapa posisi masih terbuka</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot dot-filled"></span> Sudah terisi</div>
+  <div class="legend-item"><span class="dot dot-half"></span> Sebagian terisi</div>
+  <div class="legend-item"><span class="dot dot-open"></span> Posisi terbuka</div>
+  <span class="legend-hint">· Klik kartu untuk lihat jobdesc</span>
+</div>
+
+<main>
+
+  <!-- INTI -->
+  <div class="section-label">Pengurus Inti</div>
+  <div class="inti-grid">
+
+    <div class="card inti filled" onclick="openModal('ketua-dk')">
+      <div class="role">Ketua DK</div>
+      <div class="names"><span class="name">OTS Kala</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card inti filled" onclick="openModal('wakil-ketua')">
+      <div class="role">Wakil Ketua</div>
+      <div class="names"><span class="name">OTS Tidar</span><span class="name">OTS Rafie</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card inti filled" onclick="openModal('bendahara')">
+      <div class="role">Bendahara</div>
+      <div class="names"><span class="name">OTS Aleena</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+  </div>
+
+  <!-- DIVISI -->
+  <div class="section-label">Divisi Kepengurusan</div>
+  <div class="divisi-grid">
+
+    <div class="card filled" onclick="openModal('komunikasi-saimart')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Komunikasi & SAIMart</div>
+      <div class="names"><span class="name">OTS Nisa</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('fund-raising-merch')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Fund Raising & Merch</div>
+      <div class="names">
+        <span class="name">OTS Reya</span><span class="name">OTS Asyifa</span>
+        <span class="name">OTS Rayi</span><span class="name">OTS Rahva</span><span class="name">OTS Ahsan</span>
+      </div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('proposal-sponsorship')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Proposal & Sponsorship</div>
+      <div class="names"><span class="name">OTS Sami</span><span class="name">OTS Wildan</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('konsumsi')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Konsumsi</div>
+      <div class="names"><span class="name">OTS Tasha</span><span class="name">OTS Aka</span><span class="name">OTS Kiyan</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('transportasi')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Transportasi</div>
+      <div class="names"><span class="name">OTS Arkan</span><span class="name">OTS Ega</span><span class="name">OTS Faqih</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('perlengkapan-aset')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Perlengkapan & Aset</div>
+      <div class="names"><span class="name">OTS Rhakan</span><span class="name">OTS Alisha</span><span class="name">OTS Raffasya</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card open" onclick="openModal('desain-medsos')">
+      <span class="status-badge badge-open">Terbuka</span>
+      <div class="role">Desain & Media Sosial</div>
+      <div class="names" style="color:var(--muted); font-size:14px;">Dibutuhkan 2 anggota</div>
+      <div class="open-slots"><span class="slot-pill">Posisi 1</span><span class="slot-pill">Posisi 2</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card open" onclick="openModal('dokumentasi-video')">
+      <span class="status-badge badge-open">Terbuka</span>
+      <div class="role">Dokumentasi & Video</div>
+      <div class="names" style="color:var(--muted); font-size:14px;">Dibutuhkan 2 anggota</div>
+      <div class="open-slots"><span class="slot-pill">Posisi 1</span><span class="slot-pill">Posisi 2</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+  </div>
+
+  <!-- PROGRAM -->
+  <div class="section-label">Koordinator Program</div>
+  <div class="divisi-grid">
+
+    <div class="card filled" onclick="openModal('rolling-book')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Rolling Book & Worksheet</div>
+      <div class="names"><span class="name">OTS Azi</span><span class="name">OTS Ghani</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('parenting-pembelajaran')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Parenting & Pembelajaran</div>
+      <div class="names"><span class="name">OTS Fatih</span><span class="name">OTS Najmah</span><span class="name">OTS Salim</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('pjbl-1')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">PJBL 1</div>
+      <div class="names"><span class="name">OTS Jeehan</span><span class="name">OTS Fariq</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card open" onclick="openModal('pjbl-2')">
+      <span class="status-badge badge-open">Terbuka</span>
+      <div class="role">PJBL 2</div>
+      <div class="names" style="color:var(--muted); font-size:14px;">Dibutuhkan 2 anggota</div>
+      <div class="open-slots"><span class="slot-pill">Posisi 1</span><span class="slot-pill">Posisi 2</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card open" onclick="openModal('pjbl-3')">
+      <span class="status-badge badge-open">Terbuka</span>
+      <div class="role">PJBL 3</div>
+      <div class="names" style="color:var(--muted); font-size:14px;">Dibutuhkan 2 anggota</div>
+      <div class="open-slots"><span class="slot-pill">Posisi 1</span><span class="slot-pill">Posisi 2</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card open" onclick="openModal('pjbl-4')">
+      <span class="status-badge badge-open">Terbuka</span>
+      <div class="role">PJBL 4</div>
+      <div class="names" style="color:var(--muted); font-size:14px;">Dibutuhkan 2 anggota</div>
+      <div class="open-slots"><span class="slot-pill">Posisi 1</span><span class="slot-pill">Posisi 2</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('outing-besar')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Outing Besar</div>
+      <div class="names"><span class="name">OTS Azka</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card filled" onclick="openModal('sosial')">
+      <span class="status-badge badge-filled">Terisi</span>
+      <div class="role">Sosial</div>
+      <div class="names"><span class="name">OTS Ghazi</span><span class="name">OTS Adzkia</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card half" onclick="openModal('menabung')">
+      <span class="status-badge badge-half">2 dari 3</span>
+      <div class="role">Menabung</div>
+      <div class="names"><span class="name">OTS Zafran</span><span class="name">OTS Affan</span></div>
+      <div class="open-slots"><span class="slot-pill half-pill">+1 posisi terbuka</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card open" onclick="openModal('kebersamaan-olahraga')">
+      <span class="status-badge badge-open">Terbuka</span>
+      <div class="role">Kebersamaan & Olahraga</div>
+      <div class="names" style="color:var(--muted); font-size:14px;">Dibutuhkan 2 anggota</div>
+      <div class="open-slots"><span class="slot-pill">Posisi 1</span><span class="slot-pill">Posisi 2</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+    <div class="card half" onclick="openModal('family-gathering')">
+      <span class="status-badge badge-half">1 dari 2</span>
+      <div class="role">Family Gathering</div>
+      <div class="names"><span class="name">OTS Fatih</span></div>
+      <div class="open-slots"><span class="slot-pill half-pill">+1 posisi terbuka</span></div>
+      <div class="jobdesc-hint">Lihat jobdesc →</div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <div class="open-count">🟢 9 posisi masih terbuka</div>
+    <h3>Bergabung dalam Kepengurusan DK SD5</h3>
+    <p>Masih banyak peran yang menunggu untuk diisi.<br>
+    Hubungi Ketua DK atau WaDK untuk mendaftar.</p>
+  </div>
+
+</main>
+
+<footer>
+  Dewan Kelas SD5 Jagawana · SAI Cipedak · 2026/2027 &nbsp;·&nbsp; Dokumen ini diperbarui secara berkala
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="modal-eyebrow" id="modal-eyebrow"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-members" id="modal-members"></div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+
+</body>
+</html>
